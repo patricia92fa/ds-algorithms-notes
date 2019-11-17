@@ -10,7 +10,24 @@
 Some introduction text, formatted in heading 2 style
 
 ## Matrices <a name="matrix"></a>
-The first paragraph text
+### Modifying a matrix in-place
+- Rotation
+### Matrix traversals
+- Linear
+- Diagonal
+- Spiral
+### DP classic problems
+#### Finding maximum subarea e.g. squares or rectangles
+1. Init DP matrix with base cases
+```python
+dp = [[0 if matrix[r][c] == '0' else 1 for c in range(cols)] for r in range(rows)]
+```
+2. Linearly iterate matrix and cumulative sum size
+```python
+if matrix[r][c] == '1':
+  dp[r][c] = min(dp[r - 1][c], dp[r][c - 1], dp[r - 1][c - 1]) + 1
+```
+The idea is that, when exploring linearly, for a cell to be the upper-right corner of a square the previously visited adjacent cells (i.e. upper, left and diagonal) must be also part of the same square. This translates to the min of their value plus the size (1) of the current cell.
 
 ## Linked Lists <a name="ll"></a>
 This is a sub paragraph, formatted in heading 3 style
@@ -64,6 +81,6 @@ Given a sorted sequence `1 ... n`, to construct a BST, we can enumerate each num
                 nodes.append((node.left, level + 1))
         return max_depth
 ```
-
+Remember tuples are **not mutable**, so convert them to list if you need to alter them. However, their attributes **can** be altered!
 ## Graphs <a name="graphs"></a>
 The second paragraph text
