@@ -12,7 +12,32 @@
 
 ## Matrices <a name="matrix"></a>
 ### Modifying a matrix in-place
-- Rotation
+#### Rotation
+#### Changing state
+Some problems require identifying cells in a certain **state** and update the whole matrix at once according to certain rules (e.g. Game of life, Zero matrix). The key is to **mark** the cells to be updated by **encoding the previous and next status** and updating only the required positions as once. Therefore:
+1. Iterate through the matrix and - after checking that you're within range - mark any state change accordingly:
+```python
+for r in range(rows):
+    for c in range(cols):
+        live_neighbours = 0
+        for d in dirs:
+            # use a temp var to store neighbours
+            #### DO NOT MODIFY THE ITERATOR ####
+            n_row, n_col = r + d[0], c + d[1]
+            if 0 <= n_row < rows and 0 <= n_col < cols and (board[n_row][n_col] in [-1, 1]):
+                live_neighbours += 1
+        if board[r][c] == 1 and live_neighbours not in [2, 3]: board[r][c] = -1
+        elif board[r][c] == 0 and live_neighbours == 3: board[r][c] = 2  
+```
+Be careful: when exploring neighbours use a different variable to access the cell e.g. `n_row`. **DO NOT MODIFY THE ITERATOR.**
+2. Iterate again and update cells to their final value:
+```python
+for i in reversed(range(top, down + 1)):
+    matrix[i][left] = val
+    val += 1
+left += 1
+```
+This way we can finally update the cell's value in a second matrix iteration, but still use the original value to compute any status updates in adjacent cells without using additional space.
 ### Matrix traversals
 #### Linear
 #### Diagonal
@@ -52,6 +77,7 @@ Make sure to check you're within range and that all conditions for valid paths s
 if (0 <= dr < rows and 0 <= dc < cols and matrix[dr][dc] > matrix[r][c]):
   path_len = max(path_len, dfs(matrix, dr, dc))
 ```
+
 ## Linked Lists <a name="ll"></a>
 ### Fast and slow pointers
 ### Reversal
