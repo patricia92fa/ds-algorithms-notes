@@ -7,6 +7,7 @@
 5. [Graphs](#graphs)
 
 ## Arrays and Strings <a name="arr"></a>
+An array is a **random access** data structure where each element can be accessed in `O(1)`. Random access is critical to many algorithms, i.e. binary search.
 #### Two pointers
 #### Window
 
@@ -21,7 +22,6 @@ for r in range(rows):
     for c in range(cols):
         live_neighbours = 0
         for d in dirs:
-            # use a temp var to store neighbours
             #### DO NOT MODIFY THE ITERATOR ####
             n_row, n_col = r + d[0], c + d[1]
             if 0 <= n_row < rows and 0 <= n_col < cols and (board[n_row][n_col] in [-1, 1]):
@@ -30,13 +30,10 @@ for r in range(rows):
         elif board[r][c] == 0 and live_neighbours == 3: board[r][c] = 2  
 ```
 Be careful: when exploring neighbours use a different variable to access the cell e.g. `n_row`. **DO NOT MODIFY THE ITERATOR.**
-2. Iterate again and update cells to their final value:
-```python
-for i in reversed(range(top, down + 1)):
-    matrix[i][left] = val
-    val += 1
-left += 1
-```
+
+2. Iterate again and update cells to their final value.
+
+Note that for very large, sparse matrices, where the matrix may not even fit in memory. 
 This way we can finally update the cell's value in a second matrix iteration, but still use the original value to compute any status updates in adjacent cells without using additional space.
 ### Matrix traversals
 #### Linear
@@ -79,10 +76,20 @@ if (0 <= dr < rows and 0 <= dc < cols and matrix[dr][dc] > matrix[r][c]):
 ```
 
 ## Linked Lists <a name="ll"></a>
-### Fast and slow pointers
+A Linked List is a **sequential access** data structure, where each element can be accesed only in particular order.
+Since the only access point to a Linked List is the `head` node, worst case TC for all operations is `O(n)`, as the desired element/position may be the last one and a traversal through all nodes is unavoidable.
+
+### Common methods
+- Insert and delete
+- Find size
+- Find middle node
+### Common techniques
+- Fast and slow pointers
+- Sentinel/Dummy head: an invariant that it is always pointing to the current correct head.
 ### Reversal
 
 ## Stacks and Queues <a name="stacks"></a>
+In general, stacks are used in matching/parsing problems, while queues are useful for preserving order i.e. in a cache implementation or an online metric computation.
 ### Iterative trees traversals
 ### Pair matching
 ### Circular queues
@@ -102,8 +109,8 @@ if (0 <= dr < rows and 0 <= dc < cols and matrix[dr][dc] > matrix[r][c]):
 | Time  | O(n) | O(n) |
 | Space | O(h) | O(w) |
 
-Maximum Width of a Binary Tree at depth (or height) h can be 2h where h starts from 0 - perfect Binary Tree.
-Height for a Balanced Binary Tree is O(Log n). Worst case occurs for skewed tree and worst case height becomes O(n).
+Maximum Width of a Binary Tree at depth (or height) `h` can be `2h` where `h` starts from `0` - perfect Binary Tree.
+Height for a Balanced Binary Tree is `O(Log n)`. Worst case occurs for skewed tree and worst case height becomes `O(n)`.
 
 ### Usage
 #### Modifying BT structure
@@ -143,3 +150,8 @@ Given an egde list, building a graph is straightforward:
             graph[v1].append(v2)
             graph[v2].append(v1)
 ```
+### Topological sort
+A topological ordering of a graph is a linear ordering of all nodes where direction of the edges is maintained. 
+- The graph must be **acyclic**, as this would prevent a linear ordering.
+- All DAGs have a topological order which can be computed in `O(1)` time.
+Simply build the graph taking into account the relationships between items. A common example is the ordering of taks i.e. one is a prerequisite of another. Then, traverse it using any traversal technique like BFS or DFS. Be mindful of where the traversal starts/stops and modify the result array if needed - e.g. DFS explores leaves first so you may need to reverse the result array.
