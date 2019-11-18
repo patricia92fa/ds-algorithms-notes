@@ -7,15 +7,25 @@
 5. [Graphs](#graphs)
 
 ## Arrays and Strings <a name="arr"></a>
-Some introduction text, formatted in heading 2 style
+#### Two pointers
+#### Window
 
 ## Matrices <a name="matrix"></a>
 ### Modifying a matrix in-place
 - Rotation
 ### Matrix traversals
-- Linear
-- Diagonal
-- Spiral
+#### Linear
+#### Diagonal
+#### Spiral
+A clean way to work with spiral traversals is to treat the matrix as layers.
+While traversing, use explicit variables and ranges in order to avoid errors. For example, to traverse the last layer of a `nxn` matrix, we define layers to be of size `n - 1` so that they can be peeled individually with the same code - only changing boundaries. We peel the first row itertating through columns in `range(left, right)`. We proceed to peel the right-most layer, iterating through rows in `range(top, down)`. Similarly, when peeling from down to top in the first column, we iterate the reserved range:
+```python
+for i in reversed(range(top, down + 1)):
+    matrix[i][left] = val
+    val += 1
+left += 1
+```
+
 ### DP classic problems
 #### Finding maximum subarea e.g. squares or rectangles
 1. Init DP matrix with base cases
@@ -29,11 +39,27 @@ if matrix[r][c] == '1':
 ```
 The idea is that, when exploring linearly, for a cell to be the upper-right corner of a square the previously visited adjacent cells (i.e. upper, left and diagonal) must be also part of the same square. This translates to the min of their value plus the size (1) of the current cell.
 
+#### Exploring all paths from cell
+1. Iterate through the matrix and trigger DFS/BFS at appropriate cells
+2. A clean way to explore all directions in each step is to iterate through **a list of direction tuples**:
+```python
+dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+for d in dirs:
+    dr, dc = r + d[0], c + d[1]
+```
+Make sure to check you're within range and that all conditions for valid paths still hold before advancing:
+```python
+if (0 <= dr < rows and 0 <= dc < cols and matrix[dr][dc] > matrix[r][c]):
+  path_len = max(path_len, dfs(matrix, dr, dc))
+```
 ## Linked Lists <a name="ll"></a>
-This is a sub paragraph, formatted in heading 3 style
+### Fast and slow pointers
+### Reversal
 
 ## Stacks and Queues <a name="stacks"></a>
-The second paragraph text
+### Iterative trees traversals
+### Pair matching
+### Circular queues
 
 ## Trees <a name="trees"></a>
 ### Concepts
@@ -83,4 +109,11 @@ Given a sorted sequence `1 ... n`, to construct a BST, we can enumerate each num
 ```
 Remember tuples are **not mutable**, so convert them to list if you need to alter them. However, their attributes **can** be altered!
 ## Graphs <a name="graphs"></a>
-The second paragraph text
+### Building adjacency lists
+Given an egde list, building a graph is straightforward:
+```python
+        graph = {i:[] for i in range(num_nodes)}
+        for v1, v2 in edges:
+            graph[v1].append(v2)
+            graph[v2].append(v1)
+```
