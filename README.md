@@ -5,9 +5,27 @@
 4. [Stacks and Queues](#stacks)
 4. [Trees](#trees)
 5. [Graphs](#graphs)
+6. [Backtracking](#back)
+7. [Combinatory 101](#comb)
 
 ## Arrays and Strings <a name="arr"></a>
 An array is a **random access** data structure where each element can be accessed in `O(1)`. Random access is critical to many algorithms, i.e. binary search.
+### Basic String manipulation
+- `text.split($separator, $num_splits)`
+- `str.maketrans($from, $to)`: creates a translation table. It is applied to using `text.translate(table)`, which iterates in text and substitutes all characters in `$from` to `$to` and leave the rest as is.
+- `text.find(seq, start, end)`: returns the lowest idx in `text` where the sequence `seq` is found such that it is fully contained in `s[start:end]`. Returns `-1` on failure.
+- `string.count(seq, start, end)`: returns the number of non-overlapping occurrences of substring `seq` in string `s[start:end]`. 
+- `string.strip(s, char)`: returns a copy of the string with *only* leading and trailing characters removed. If you need to remove all chars in any position, use split with the to-be-deleted char as a separator, the join the result.
+Remember **strings are immutable**. Therefore, any changes must be reassigned to the original variable.
+
+### Custom Sort key
+```python
+def id_type(arr):
+    _id, data = arr.split(" ", 1)
+    return (0, data, _id) if data[0].isalpha() else (1, )
+return sorted(logs, key = id_type)
+```
+
 #### Two pointers
 #### Window
 
@@ -155,3 +173,11 @@ A topological ordering of a graph is a linear ordering of all nodes where direct
 - The graph must be **acyclic**, as this would prevent a linear ordering.
 - All DAGs have a topological order which can be computed in `O(1)` time.
 Simply build the graph taking into account the relationships between items. A common example is the ordering of taks i.e. one is a prerequisite of another. Then, traverse it using any traversal technique like BFS or DFS. Be mindful of where the traversal starts/stops and modify the result array if needed - e.g. DFS explores leaves first so you may need to reverse the result array.
+
+## Backtracking <a name="back"></a>
+The runtime of backtracking algorithms is `O(b^d)`, where `b` is the branching factor and `d` is the maximum depth of recursion. Backtracking is characterized by a number of decisions `b` that can be made at each level of recursion. If you visualize the recursion tree, this is the number of children each internal node has.
+
+## Combinatory 101 <a name="comb"></a>
+### Number of ways to partition a N elements into K subsets
+A Stirling number of the second kind counts the number of ways to partition a set of `n` objects into `k` non-empty subsets.
+We have `n + k - 1` places for dividors and elements, and `k - 1` divisors to choose from. So there are `C(n + k - 1, k - 1)` possibilities i.e. 
